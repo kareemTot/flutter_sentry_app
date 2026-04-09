@@ -3,14 +3,11 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   await SentryFlutter.init((options) {
     options.dsn =
-        'https://9cc8af2ca2367e4d029c0b4e5f15f644@o4511190288760832.ingest.us.sentry.io/4511190291775488';
-    options.debug = true;
-    options.environment = 'development';
-    options.sendDefaultPii = false;
-  }, appRunner: () => runApp(SentryWidget(child: const MyApp())));
+        'https://66d059d562e1a39a2ca35f9aa73d82ea@o4511190288760832.ingest.us.sentry.io/4511190601826304';
+    options.sendDefaultPii = true;
+  }, appRunner: () => runApp(SentryWidget(child: MyApp())));
 }
 
 class MyApp extends StatelessWidget {
@@ -54,21 +51,8 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: ElevatedButton(
-        onPressed: () async {
-          try {
-            throw StateError('This is test exception');
-          } catch (exception, stackTrace) {
-            final eventId = await Sentry.captureException(
-              exception,
-              stackTrace: stackTrace,
-            );
-            debugPrint('Sentry event id: $eventId');
-
-            if (!context.mounted) return;
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text('Sent to Sentry: $eventId')));
-          }
+        onPressed: () {
+          throw StateError('This is test exception');
         },
         child: const Text('Verify Sentry Setup'),
       ),
